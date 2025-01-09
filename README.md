@@ -48,6 +48,5 @@ ffmpeg-python
 
 Send a video to the bot in Telegram. It will automatically process and re-upload the cropped version.
 
-## Contributing
-
-Feel free to submit pull requests or issues.
+## License
+This project is licensed under the [GNU Affero General Public License v3.0](https://www.gnu.org/licenses/agpl-3.0.html).
