@@ -8,35 +8,19 @@ shtcrop is a Telegram bot that detects and crops black, white, or blurry borders
 - **Telegram Integration**: Processes and re-uploads videos directly in Telegram.
 - **Multi-Mode**: Supports black, white, and blurry(experimental) border detection.
 
-## Requirements
+## Usage
 
-Install these Python libraries:
-```
-asyncio
-opencv-python-headless
-numpy
-Pyrogram
-python-dotenv
-hashlib
-datetime
-ffmpeg-python
-```
-
-## Installation
-
-1. **Install Dependencies**:
+1. **Create venv & install dependencies**:
    ```bash
+   python -m venv venv
+   source venv/bin/activate
    pip install -r requirements.txt
    ```
 
 2. **Set Up Environment Variables**:
-   Create a `.env` file and add:
+   Edit `.env` file:
    ```
-   TOKEN=<Telegram Bot Token>
-   API_ID=<Telegram API ID>
-   API_HASH=<Telegram API Hash>
-   ALLOWED_CHAT_IDS=<Allowed Chat IDs>
-   MAX_FILE_SIZE_MB=<Max File Size in MB>
+   mv env.example .env
    ```
 
 3. **Run the Bot**:
