@@ -1,5 +1,8 @@
-python-telegram-bot
-moviepy
+asyncio
+opencv-python-headless
+numpy
+Pyrogram
 python-dotenv
-pyrogram
-tgcrypto
+hashlib
+datetime
+ffmpeg-python
