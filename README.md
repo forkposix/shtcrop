@@ -41,7 +41,7 @@ ffmpeg-python
 
 3. **Run the Bot**:
    ```bash
-   python bot.py
+   python cropper.py
    ```
 
 ## Usage
