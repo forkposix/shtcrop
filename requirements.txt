@@ -1,8 +1,7 @@
 asyncio
-opencv-python-headless
-numpy
-Pyrogram
-python-dotenv
-hashlib
-datetime
 ffmpeg-python
+numpy
+opencv-python-headless
+pyrofork
+python-dotenv
+TgCrypto-pyrofork
