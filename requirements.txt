@@ -4,3 +4,4 @@ numpy
 opencv-python-headless
 pyrogram
 python-dotenv
+TgCrypto-pyrofork
