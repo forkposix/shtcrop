@@ -2,6 +2,9 @@
 
 shtcrop is a Telegram bot that detects and crops black, white, or blurry borders in videos, then re-uploads the edited video.
 
+# Turkish Translation
+[README-TR](README-TR.md)
+
 ## Features
 - **Border Detection**: Identifies black, white, or blurry borders.
 - **Video Cropping**: Removes unwanted borders from videos.
