@@ -26,11 +26,14 @@ app = Client(
 )
 
 def detect_black_borders(cap):
+    frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    skip_interval = 5
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     min_x, min_y, max_x, max_y = width, height, 0, 0
 
-    for _ in range(int(cap.get(cv2.CAP_PROP_FRAME_COUNT))):
+    for i in range(0, frame_count, skip_interval):
+        cap.set(cv2.CAP_PROP_POS_FRAMES, i)
         ret, frame = cap.read()
         if not ret:
             break
@@ -62,11 +65,14 @@ def invert_colors(image):
 
 
 def detect_white_borders(cap):
+    frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    skip_interval = 5
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     min_x, min_y, max_x, max_y = width, height, 0, 0
 
-    for _ in range(int(cap.get(cv2.CAP_PROP_FRAME_COUNT))):
+    for i in range(0, frame_count, skip_interval):
+        cap.set(cv2.CAP_PROP_POS_FRAMES, i)
         ret, frame = cap.read()
         if not ret:
             break
@@ -105,20 +111,40 @@ def detect_blurry_regions(cap):
     return blurry_frames
 
 def detect_blurry_borders(cap):
-    blurry_frames = detect_blurry_regions(cap)
+    frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    skip_interval = 5
+    blurry_frames = []
+    blur_threshold = 100
+
+    # Analyze frames at intervals
+    frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    for i in range(0, frame_count, skip_interval):
+        cap.set(cv2.CAP_PROP_POS_FRAMES, i)
+        ret, frame = cap.read()
+        if not ret:
+            break
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        variance = cv2.Laplacian(gray, cv2.CV_64F).var()
+        if variance < blur_threshold:
+            blurry_frames.append(i)
+
     if not blurry_frames:
-        return 0, 0, int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        return 0, 0, frame_width, frame_height
 
-    min_x, min_y, max_x, max_y = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)), 0, 0
+    min_x, min_y, max_x, max_y = frame_width, frame_height, 0, 0
 
-    for frame_index, _ in blurry_frames:
+    # Collect bounding boxes around blurry areas
+    for frame_index in blurry_frames:
         cap.set(cv2.CAP_PROP_POS_FRAMES, frame_index)
         ret, frame = cap.read()
         if not ret:
             continue
-
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        # Morphological operations to reduce noise
         _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
+        thresh = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
         contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         for contour in contours:
